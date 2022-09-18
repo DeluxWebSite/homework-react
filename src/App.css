@@ -27,6 +27,30 @@
 .App-link {
   color: #61dafb;
 }
+.homework-style {
+  margin: 0 auto;
+  max-width: 600px;
+  border: 1px solid gold;
+  color: blue;
+  text-align: center;
+}
+.input-style {
+  max-width: 300px;
+  height: 24px;
+  text-align: center;
+}
+.btn-input-style {
+  max-width: max-content;
+  text-align: center;
+  border-radius: 8px;
+  color: green;
+  border: 1px solid green;
+}
+.counter {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 
 @keyframes App-logo-spin {
   from {
