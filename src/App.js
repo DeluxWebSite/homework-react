@@ -1,50 +1,65 @@
 import './App.css';
-import React, { useState, useRef } from "react";
+import React, { useState, useEffect } from "react";
 
 
 
 function App() {
-  const [state, setState] = useState(0);
-  const ref1 = useRef();
-  const ref2 = useRef();
-  const inputClear = (e) => {
-    ref1.current.value = ''
-    ref2.current.value = ''
-  }
-  const [obj, setObj] = useState([]);
+  const [author, setAuthor] = useState('');
+  const [text, setText] = useState('');
   const [messageList, setMessageList] = useState([]);
 
-  function change(name, e) {
-    setObj({ ...obj, [name]: e.target.value });
+  const handlerSubmit = (e) => {
+    e.preventDefault();
+    setMessageList(prevState => [...prevState, {
+      id: givLastId(prevState),
+      author: author,
+      text: text
+    }])
+    setAuthor('');
+    setText('');
   }
-  function addMessages() {
-    setMessageList([...messageList, obj]);
-    inputClear();
+
+  function givLastId(array) {
+    return array.length ? array[array.length - 1].id + 1 : 0
+  }
+
+  useEffect(() => {
+    setTimeout(() => {
+      botAnswer()
+    }, 3000)
+  }, [messageList])
+
+  function botAnswer() {
+    const lastAuthor = messageList[messageList.length - 1];
+    if (lastAuthor && lastAuthor.author) {
+      setMessageList(prevState => [...prevState, {
+        id: givLastId(prevState),
+        text: `Сообщение автора ${lastAuthor.author} отправлено`
+      }
+      ])
+    }
   }
 
   return (
     <div className='App' >
-      <input className='input-style' type="text" name="author" onChange={(e) => change('author', e)} placeholder='author' ref={ref1} />
-      <input className='input-style' type="text" name='message' onChange={(e) => change('message', e)} placeholder='message' ref={ref2} />
-      <button className='btn-input-style' onClick={addMessages} >ОТправить сообщение</button>
+      <hr />
+      <form action="#" onSubmit={handlerSubmit}>
+        <input value={author} onChange={(e) => setAuthor(e.target.value)} placeholder='author' />
+        <input value={text} onChange={(e) => setText(e.target.value)} placeholder='message' />
+        <button type='submit' >ОТправить сообщение</button>
+      </form>
       <hr />
       {
-        messageList.map((item) => {
+        messageList.map((message) => {
           return (
-            <div className="homework-style">
-              <p>Author : {item.author}</p>
-              <p>Message : {item.message}</p><br />
-            </div>
+            <div key={message.id} >
+              <p>Author : {message.author}</p>
+              <p>Message : {message.text}</p><br />
+            </div >
           )
         })
       }
-      <hr />
-      <div className='counter'>
-        <button onClick={() => setState(state - 1)}>-</button>
-        <h4>{state}</h4>
-        <button onClick={() => setState(state + 1)}>+</button>
-        <button onClick={(() => setState(0))}>Reset</button>
-      </div>
+
     </div >
   );
 }
