@@ -1,67 +1,43 @@
 import './App.css';
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
+import { Route, Routes } from 'react-router-dom';
+import { Provider } from 'react-redux';
+import Layout from './components/Layout';
+import HomePage from './pages/HomePage';
+import ProfilePage from './pages/ProfilePage';
+import ChatsPage from './pages/ChatsPage';
 
+import NotFoundPage from './pages/NotFoundPage';
+import { BrowserRouter } from 'react-router-dom';
+import Messages from './pages/Messages';
+import { ThemeContext, themes } from './components/Context';
+
+import { store } from "../src/redux/reducers/configureStore"
 
 
 function App() {
-  const [author, setAuthor] = useState('');
-  const [text, setText] = useState('');
-  const [messageList, setMessageList] = useState([]);
-
-  const handlerSubmit = (e) => {
-    e.preventDefault();
-    setMessageList(prevState => [...prevState, {
-      id: givLastId(prevState),
-      author: author,
-      text: text
-    }])
-    setAuthor('');
-    setText('');
+  const [theme, setTheme] = useState(themes.light);
+  const toggleTheme = () => {
+    setTheme(prevState => prevState === themes.light ? themes.dark : themes.light);
   }
-
-  function givLastId(array) {
-    return array.length ? array[array.length - 1].id + 1 : 0
-  }
-
-  useEffect(() => {
-    setTimeout(() => {
-      botAnswer()
-    }, 3000)
-  }, [messageList])
-
-  function botAnswer() {
-    const lastAuthor = messageList[messageList.length - 1];
-    if (lastAuthor && lastAuthor.author) {
-      setMessageList(prevState => [...prevState, {
-        id: givLastId(prevState),
-        text: `Сообщение автора ${lastAuthor.author} отправлено`
-      }
-      ])
-    }
-  }
-
   return (
-    <div className='App' >
-      <hr />
-      <form action="#" onSubmit={handlerSubmit}>
-        <input value={author} onChange={(e) => setAuthor(e.target.value)} placeholder='author' />
-        <input value={text} onChange={(e) => setText(e.target.value)} placeholder='message' />
-        <button type='submit' >ОТправить сообщение</button>
-      </form>
-      <hr />
-      {
-        messageList.map((message) => {
-          return (
-            <div key={message.id} >
-              <p>Author : {message.author}</p>
-              <p>Message : {message.text}</p><br />
-            </div >
-          )
-        })
-      }
-
-    </div >
-  );
+    <Provider store={store}>
+      <ThemeContext.Provider value={theme}>
+        <button onClick={toggleTheme}>Поменять тему</button>
+        <BrowserRouter>
+          <Routes>
+            <Route exact path="/" element={<Layout />} >
+              <Route index element={<HomePage />} />
+              <Route exact path="profile" element={<ProfilePage />} />
+              <Route exact path="chats" element={<ChatsPage />} />
+              <Route exact path='messages/:id' element={<Messages />} />
+              <Route path="*" element={<NotFoundPage />} />
+            </Route>
+          </Routes>
+        </BrowserRouter>
+      </ThemeContext.Provider>
+    </Provider>
+  )
 }
 
 export default App;
