@@ -42,7 +42,7 @@ const ChatsPage = () => {
                 {chats.map(chat =>
                     <li key={chat.id}>
                         <Link to={`/messages/${chat.id}`}>Чат : {chat.title}</Link>
-                        <button onClick={() => dispath({ type: 'delete', payload: chat.id })}>X</button>
+                        <button onClick={() => dispath({ type: 'delete', payload: chat.id, meta: { delayMs: 5000 } })}>X</button>
                     </li>
                 )}
             </ul>

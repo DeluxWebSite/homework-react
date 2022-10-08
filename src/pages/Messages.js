@@ -29,7 +29,7 @@ const Messages = () => {
                 {messages.map(mes =>
                     <li li key={mes.id} >
                         <p >{mes.text}</p>
-                        <button onClick={() => dispath({ type: 'delete', payload: mes.id })}>Удалить</button>
+                        <button onClick={() => dispath({ type: 'delete', payload: mes.id, meta: { delayMs: 5000 } })}>Удалить</button>
                     </li>
                 )}
             </ul>
