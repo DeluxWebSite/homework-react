@@ -4,7 +4,9 @@ const ProfilePage = () => {
     return (
         <div>
             <h2> PROFILE </h2>
-        </div>
+
+
+        </div >
     )
 }
 

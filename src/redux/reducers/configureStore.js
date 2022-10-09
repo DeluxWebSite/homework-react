@@ -1,12 +1,12 @@
 import { applyMiddleware, createStore } from "redux";
-import { combineReducers } from "redux";
-import { chatsReducer } from "./chatReducer/chatsReducer";
-import { messagesReducer } from "./messageReducer/messagesReducer";
-import storage from "redux-persist/lib/storage";
-import persistReducer from "redux-persist/es/persistReducer";
-import persistStore from "redux-persist/es/persistStore";
+// import { combineReducers } from "redux";
+// import { chatsReducer } from "./chatReducer/chatsReducer";
+// import { messagesReducer } from "./messageReducer/messagesReducer";
+// import storage from "redux-persist/lib/storage";
+// import persistReducer from "redux-persist/es/persistReducer";
+// import persistStore from "redux-persist/es/persistStore";
 import thunk from "redux-thunk";
-
+import { reducer } from "./reducer";
 
 // const timeOut = store => next => action => {
 //     const delay = action?.meta?.delayMs
@@ -19,16 +19,19 @@ import thunk from "redux-thunk";
 //     }
 // }
 
-const config = {
-    key: 'root',
-    storage
-}
-export const reducer = combineReducers({
-    messages: messagesReducer,
-    chats: chatsReducer
-})
-const persistedReducer = persistReducer(config, reducer)
+// const config = {
+//     key: 'root',
+//     storage
+// }
+// export const reducer = combineReducers({
+//     messages: messagesReducer,
+//     chats: chatsReducer,
 
-export const store = createStore(persistedReducer, applyMiddleware(thunk));
+// })
+// const persistedReducer = persistReducer(config, reducer)
 
-export const persist = persistStore(store)
+// export const store = createStore(persistedReducer, applyMiddleware(thunk));
+
+export const store = createStore(reducer, applyMiddleware(thunk));
+
+// export const persist = persistStore(store)

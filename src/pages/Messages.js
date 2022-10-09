@@ -27,7 +27,7 @@ const Messages = () => {
             <button onClick={handleAdd}>Add</button>
             <ul>
                 {messages.map(mes =>
-                    <li li key={mes.id} >
+                    <li key={mes.id} >
                         <p >{mes.text}</p>
                         <button onClick={() => dispath({ type: 'delete', payload: mes.id, meta: { delayMs: 5000 } })}>Удалить</button>
                     </li>
