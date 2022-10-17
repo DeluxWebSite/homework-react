@@ -66,7 +66,7 @@ function App() {
       {posts?.map((posts) => {
         return (
           <div key={posts.id} >
-            {posts.title}
+            {posts.id} {posts.title}
           </div>
         )
       })
