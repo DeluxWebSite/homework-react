@@ -1,67 +1,78 @@
 import './App.css';
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
+// import { Route, Routes } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+// import { useState } from 'react';
+// import Layout from './components/Layout';
+// import HomePage from './pages/HomePage';
+// import ProfilePage from './pages/ProfilePage';
+// import ChatsPage from './pages/ChatsPage';
 
+// import NotFoundPage from './pages/NotFoundPage';
+// import { BrowserRouter } from 'react-router-dom';
+// import Messages from './pages/Messages';
+// import { ThemeContext, themes } from './components/Context';
 
+import { getDate } from './redux/reducers/reducer';
+import './store/actionTypes';
+import { getPostsSelector, getPostsLoading, getPostsError } from './store/selectors';
 
 function App() {
-  const [author, setAuthor] = useState('');
-  const [text, setText] = useState('');
-  const [messageList, setMessageList] = useState([]);
 
-  const handlerSubmit = (e) => {
-    e.preventDefault();
-    setMessageList(prevState => [...prevState, {
-      id: givLastId(prevState),
-      author: author,
-      text: text
-    }])
-    setAuthor('');
-    setText('');
-  }
-
-  function givLastId(array) {
-    return array.length ? array[array.length - 1].id + 1 : 0
-  }
-
+  const posts = useSelector(getPostsSelector);
+  const loading = useSelector(getPostsLoading);
+  const error = useSelector(getPostsError);
+  const dispatch = useDispatch();
   useEffect(() => {
-    setTimeout(() => {
-      botAnswer()
-    }, 3000)
-  }, [messageList])
+    dispatch(getDate());
+  }, []);
 
-  function botAnswer() {
-    const lastAuthor = messageList[messageList.length - 1];
-    if (lastAuthor && lastAuthor.author) {
-      setMessageList(prevState => [...prevState, {
-        id: givLastId(prevState),
-        text: `Сообщение автора ${lastAuthor.author} отправлено`
-      }
-      ])
-    }
+  // const [theme, setTheme] = useState(themes.light);
+  // const toggleTheme = () => {
+  //   setTheme(prevState => prevState === themes.light ? themes.dark : themes.light);
+  // }
+
+  if (loading) {
+    return (
+      <div>
+        ИДЕТ ЗАГРУЗКА...
+      </div>
+    )
   }
-
+  if (error) {
+    return (
+      <div >
+        Произошла ошибка
+      </div>
+    )
+  }
   return (
-    <div className='App' >
-      <hr />
-      <form action="#" onSubmit={handlerSubmit}>
-        <input value={author} onChange={(e) => setAuthor(e.target.value)} placeholder='author' />
-        <input value={text} onChange={(e) => setText(e.target.value)} placeholder='message' />
-        <button type='submit' >ОТправить сообщение</button>
-      </form>
-      <hr />
-      {
-        messageList.map((message) => {
-          return (
-            <div key={message.id} >
-              <p>Author : {message.author}</p>
-              <p>Message : {message.text}</p><br />
-            </div >
-          )
-        })
-      }
+    // <ThemeContext.Provider value={theme}>
+    //   <button onClick={toggleTheme}>Поменять тему</button>
+    //   <BrowserRouter>
+    //     <Routes>
+    //       <Route exact path="/" element={<Layout />} >
+    //         <Route index element={<HomePage />} />
+    //         <Route exact path="profile" element={<ProfilePage />} />
+    //         <Route exact path="chats" element={<ChatsPage />} />
+    //         <Route exact path='messages/:id' element={<Messages />} />
+    //         <Route path="*" element={<NotFoundPage />} />
+    //       </Route>
+    //     </Routes>
+    //   </BrowserRouter>
+    // </ThemeContext.Provider >
 
-    </div >
-  );
+    <>
+      {posts?.map((posts) => {
+        return (
+          <div key={posts.id} >
+            {posts.id} {posts.title}
+          </div>
+        )
+      })
+      }
+    </>
+  )
 }
 
 export default App;
